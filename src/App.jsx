@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Sun, Moon, Languages, Mail, Terminal, Layout, Server, Monitor } from 'lucide-react';
-
+import { DotLottiePlayer } from '@dotlottie/react-player';
 // Konten Multibahasa
 const content = {
   id: {
@@ -29,8 +29,8 @@ const content = {
 
 const experiences = [
   { company: "CSUL Finance", year: "2026 - Sekarang", desc: "Develop aplikasi CONFINS & SISCA untuk monitoring performa dan reporting real-time." },
-  { company: "Bank Syariah Indonesia", year: "2024 - 2025", desc: "Membangun aplikasi Dataku untuk KPI dan dashboard internal." },
-  { company: "Stafinc Group", year: "2023", desc: "Sistem ESMK untuk monitoring indikator keselamatan." },
+  { company: "Bank Syariah Indonesia", year: "2024 - 2025", desc: "Membangun aplikasi Dataku Leads Management Team Business dan dashboard internal." },
+  { company: "Kemenhub", year: "2023", desc: "Sistem ESMK untuk monitoring indikator keselamatan." },
   { company: "Badan Wakaf Al-Quran", year: "2021 - 2023", desc: "Sistem distribusi nasional dengan tracking & dashboard monitoring." },
   { company: "PT Fusi Solusi", year: "2020", desc: "Pengembangan modul e-procurement PT Indonesia Power." },
   { company: "PT Redbit Teknologi Indonesia", year: "2019 - 2020", desc: "Pengembangan Aplikasi PTSP Dinas Teknis Kota Jakarta." },
@@ -65,12 +65,21 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(true);
   const [lang, setLang] = useState('id');
+  const [yearIdx, setYearIdx] = useState(0);
 
   // Efek simulasi loading saat refresh
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1200);
     return () => clearTimeout(timer);
   }, []);
+
+  // Efek rotasi tahun di background hero
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setYearIdx((prev) => (prev + 1) % experiences.length);
+    }, 5000); // Berganti setiap 5 detik sesuai durasi animasi CSS
+    return () => clearInterval(interval);
+  }, [experiences.length]);
 
   // Update class di HTML tag untuk Tailwind Dark Mode
   useEffect(() => {
@@ -109,13 +118,25 @@ function App() {
       </nav>
 
       {/* Hero Section */}
-      <header className="min-h-screen flex flex-col justify-center items-center text-center px-6">
-  {/* // KODE BARU (SOLUSI FIX HURUF G TERPOTONG) */}
-<h1 className="text-5xl md:text-7xl font-black mb-4 tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-emerald-500 to-blue-500 animate-gradient leading-[1.3] -mb-[0.3em] inline-block">
-  Bambang Wisnu
-</h1>
-        <p className="text-xl md:text-2xl font-medium opacity-80 mb-6">{t.role}</p>
-        <p className="max-w-2xl text-lg opacity-60 leading-relaxed">{t.heroDesc}</p>
+      <header className="min-h-screen flex flex-col justify-center items-center text-center px-6 relative overflow-hidden">
+        {/* Background Year Journey */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 p-10">
+          <div 
+            key={yearIdx}
+            className={`flex flex-col items-center animate-year-journey transition-colors duration-1000 ${darkMode ? 'text-blue-500' : 'text-emerald-500'}`}
+          >
+            <span className="text-[4vw] font-mono font-bold tracking-[0.3em] opacity-50 uppercase">{experiences[yearIdx].year}</span>
+            <span className="text-[10vw] font-black uppercase tracking-tighter leading-none my-2">{experiences[yearIdx].company}</span>
+            <span className="text-[2vw] font-medium max-w-4xl text-center italic opacity-100">{experiences[yearIdx].desc}</span>
+          </div>
+        </div>
+
+          {/* // KODE BARU (SOLUSI FIX HURUF G TERPOTONG) */}
+        <h1 className="relative z-10 text-5xl md:text-7xl font-black mb-4 tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-emerald-500 to-blue-500 animate-gradient leading-[1.3] -mb-[0.3em] inline-block">
+          Bambang Wisnu
+        </h1>
+        <p className="relative z-10 text-xl md:text-2xl font-medium opacity-80 mb-6">{t.role}</p>
+        <p className="relative z-10 max-w-2xl text-lg opacity-60 leading-relaxed">{t.heroDesc}</p>
       </header>
 
       {/* About Section */}
