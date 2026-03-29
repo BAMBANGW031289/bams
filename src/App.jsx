@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Sun, Moon, Languages, Mail, Terminal, Layout, Server, Monitor } from 'lucide-react';
-import { DotLottiePlayer } from '@dotlottie/react-player';
 // Konten Multibahasa
 const content = {
   id: {
